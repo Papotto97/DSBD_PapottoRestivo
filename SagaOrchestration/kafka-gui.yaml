@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-gui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: kafka-gui
+  template:
+    metadata:
+      labels:
+        name: kafka-gui
+        app: kafka-gui
+    spec:
+      containers:
+      - name: kafka-gui
+        image: kafkagui:1.0  
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kafka-gui
+  name: kafka-gui-svc
+spec:
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 1337
+  selector:
+    app: kafka-gui
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-gui-svc-lb
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+  selector:
+    app: kafka-gui
