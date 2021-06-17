@@ -1,13 +1,13 @@
-package com.unict.auctionmanager;
+package com.unict.sagaorchestrator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AuctionManagerApplication {
+public class SagaOrchestrationApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AuctionManagerApplication.class, args);
+		SpringApplication.run(SagaOrchestrationApplication.class, args);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.unict.model;
+package com.unict.sagaorchestrator.model;
 
 import lombok.Data;
 

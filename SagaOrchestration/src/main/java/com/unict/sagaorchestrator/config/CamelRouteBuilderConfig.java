@@ -1,4 +1,4 @@
-package com.unict.sagaorchestrator;
+package com.unict.sagaorchestrator.config;
 
 import java.util.concurrent.TimeUnit;
 
@@ -6,10 +6,14 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.SagaPropagation;
 import org.springframework.stereotype.Component;
 
-import com.unict.model.AuctionBean;
+import com.unict.sagaorchestrator.exception.SagaException;
+import com.unict.sagaorchestrator.model.AuctionBean;
+import com.unict.sagaorchestrator.processor.CheckRequestProcessor;
+import com.unict.sagaorchestrator.processor.CompressorProcessor;
+import com.unict.sagaorchestrator.service.AuctionService;
 
 @Component
-public class Auction extends RouteBuilder{
+public class CamelRouteBuilderConfig extends RouteBuilder {
 	
 	private static final String headerAsset="relBean";
 	

@@ -1,4 +1,4 @@
-package com.unict.config;
+package com.unict.sagaorchestrator.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterOutputStream;
+
 public class CompressionUtil {
 
 	public static String compressAndReturnB64(String text) throws IOException {
