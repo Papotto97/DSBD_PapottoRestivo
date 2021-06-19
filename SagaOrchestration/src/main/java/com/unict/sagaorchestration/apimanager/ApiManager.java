@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -22,7 +23,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unict.sagaorchestration.exception.ApiManagerException;
 import com.unict.sagaorchestration.model.BaseModel;
-import com.unict.sagaorchestration.model.ClusterBean;
 import com.unict.sagaorchestration.model.Endpoint;
 import com.unict.sagaorchestration.model.MicroServices;
 
@@ -34,7 +34,7 @@ public class ApiManager {
 	
 	private static ObjectMapper mapper;
 	private static HashMap<MicroServices,String> endpoints;
-	private static ClusterBean cluster;
+//	private static ClusterBean cluster;
 	BaseModel<?> baseModel;
 
 	@PostConstruct
@@ -43,8 +43,11 @@ public class ApiManager {
 			mapper = new ObjectMapper(new JsonFactory());
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			InputStream input = ApiManager.class.getClassLoader().getResourceAsStream("api.yaml");
-
-			endpoints= new HashMap<MicroServices, String>();
+			List<Endpoint> endpointList = mapper.readValue(input, new TypeReference<List<Endpoint>>() {});
+			HashMap<MicroServices, String> endpoints = new HashMap<>();
+			for(Endpoint tmp: endpointList) {
+				endpoints.put(MicroServices.valueOf(tmp.getMicroservice()), tmp.getUrl());
+			}
 //			cluster=mapper.readValue(input,new TypeReference<ClusterBean>() { });
 //			for(Endpoint tmp:cluster.getEndpoint()) {
 //				endpoints.put(MicroServices.valueOf(tmp.getMicroservice()), tmp.getUrl());
