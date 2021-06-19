@@ -1,4 +1,4 @@
-package com.unict.sagaorchestrator.config;
+package com.unict.sagaorchestration.config;
 
 import java.util.concurrent.TimeUnit;
 
@@ -6,11 +6,12 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.SagaPropagation;
 import org.springframework.stereotype.Component;
 
-import com.unict.sagaorchestrator.exception.SagaException;
-import com.unict.sagaorchestrator.model.AuctionBean;
-import com.unict.sagaorchestrator.processor.CheckRequestProcessor;
-import com.unict.sagaorchestrator.processor.CompressorProcessor;
-import com.unict.sagaorchestrator.service.AuctionService;
+import com.unict.sagaorchestration.exception.SagaException;
+import com.unict.sagaorchestration.model.AuctionBean;
+import com.unict.sagaorchestration.processor.CheckRequestProcessor;
+import com.unict.sagaorchestration.processor.CompressorProcessor;
+import com.unict.sagaorchestration.service.AuctionService;
+import com.unict.sagaorchestration.service.WalletService;
 
 @Component
 public class CamelRouteBuilderConfig extends RouteBuilder {
@@ -25,17 +26,12 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 		
 		from("kafka:auctions")
 		.process(new CheckRequestProcessor())
-		.choice()
-			.when(body().convertTo(AuctionBean.class).contains(null)).to("direct:updateOffer")
-			.otherwise().to("direct:createAuction")
 		.doTry()
-			.bean(AuctionService.class, "addAuction")
 			.to("direct:createAuction")
 		.doCatch(SagaException.class)
 			.transform()
 			.simple("${exception}")
 			.log("exception generate : ${body}")
-			.bean(AuctionService.class, "error")
 		.endDoTry();
 		
 		from("direct:createAuction")
@@ -49,14 +45,32 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 				.to("direct:setWallet")
 				.end();
 		
+		from("direct:setAuction")
+		.saga()
+		.propagation(SagaPropagation.SUPPORTS)
+		.compensation("direct:cancelauction")
+		.bean(AuctionService.class, "setauction")
+		.option(headerAsset, body());
+
+		from("direct:setWallet")
+		.saga()
+		.propagation(SagaPropagation.SUPPORTS)
+		.compensation("direct:cancelwalletupdate")
+		.bean(WalletService.class, "updatewallet")
+		.option(headerAsset, body());
+		
 		from("direct:completeAuction")
 		.transform(header(headerAsset))
-		.bean(AuctionService.class, "success")
 		.log("all done!");
 		
 		from("direct:cancelAuction")
 		.transform(header(headerAsset))
-		.log("ops!").end();
+		.bean(AuctionService.class, "rollback");
+		
+		from("direct:cancelwalletupdate")
+		.transform(header(headerAsset))
+		.bean(WalletService.class, "rollback");
+
 
 	}
 }

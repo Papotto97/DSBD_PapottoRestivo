@@ -1,4 +1,4 @@
-package com.unict.sagaorchestrator.utils;
+package com.unict.sagaorchestration.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

@@ -48,7 +48,13 @@
             <artifactId>camel-spring-boot-starter</artifactId>
             <version>3.8.0</version>
         </dependency>
-	
+		
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-undertow-starter</artifactId>
+			<!-- use the same version as your Camel core version -->
+			<version>3.8.0</version>
+		</dependency>
 	
 		<dependency>
 			<groupId>org.apache.camel.springboot</groupId>
@@ -76,6 +82,13 @@
 			<version>3.8.0</version>
 			<!-- use the same version as your Camel core version -->
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-web</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

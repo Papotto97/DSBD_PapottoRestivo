@@ -1,4 +1,4 @@
-package com.unict.sagaorchestrator.processor;
+package com.unict.sagaorchestration.processor;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.unict.sagaorchestrator.utils.CompressionUtil;
+import com.unict.sagaorchestration.utils.CompressionUtil;
 
 @Component
 public class CompressorProcessor implements Processor{

@@ -1,4 +1,4 @@
-package com.unict.sagaorchestrator.exception;
+package com.unict.sagaorchestration.exception;
 
 import java.math.BigInteger;
 

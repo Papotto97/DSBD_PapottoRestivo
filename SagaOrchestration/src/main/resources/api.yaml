@@ -1,0 +1,5 @@
+endpoint:
+   - microservice: Auction
+     url: http://auctionmanager.default:8080
+   - microservice: Wallet
+     url: http://walletmanager.default:8080
