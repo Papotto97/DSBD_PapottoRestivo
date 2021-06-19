@@ -1,5 +1,7 @@
 package com.unict.walletmanager.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,39 +10,51 @@ import com.unict.walletmanager.entity.WalletEntity;
 import com.unict.walletmanager.model.AuctionBean;
 import com.unict.walletmanager.model.BaseModel;
 import com.unict.walletmanager.model.BaseModelBuilder;
+import com.unict.walletmanager.repository.UserRepository;
 import com.unict.walletmanager.repository.WalletRepository;
 
 @Service
 public class WalletService {
 	
 	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
 	private WalletRepository walletRepository;
 	
 	
 	public BaseModel<?> set(AuctionBean bean){
-		UserEntity user = new UserEntity();
-		user.setId(bean.getUserId());
-		WalletEntity en = walletRepository.findByUser(user);
-
-		en.setDisponsability(en.getDisponsability() - bean.getStake());
-		en.setActualStaked(en.getActualStaked() + bean.getStake());
+		Optional<UserEntity> user = userRepository.findById(bean.getUserId());
+		if(user.isPresent()) {
+			WalletEntity en = user.get().getWallet();
+			en.setDisponsability(en.getDisponsability() - bean.getStake());
+			en.setActualStaked(en.getActualStaked() + bean.getStake());
+			
+			walletRepository.save(en);
+			
+			return BaseModelBuilder.success("Wallet updated");
+		}else {
+			return BaseModelBuilder.error("404","Error updating wallet");
+		}
 		
-		walletRepository.save(en);
-		
-		return BaseModelBuilder.success("Wallet updated");
 	}
 	
 	public BaseModel<?> rollback(AuctionBean bean){
-		UserEntity user = new UserEntity();
-		user.setId(bean.getUserId());
-		WalletEntity en = walletRepository.findByUser(user);
+		Optional<UserEntity> user = userRepository.findById(bean.getUserId());
+			if(user.isPresent()) {
+				
+			WalletEntity en = user.get().getWallet();
 
-		en.setDisponsability(en.getDisponsability() + bean.getStake());
-		en.setActualStaked(en.getActualStaked() - bean.getStake());
+			en.setDisponsability(en.getDisponsability() + bean.getStake());
+			en.setActualStaked(en.getActualStaked() - bean.getStake());
+			
+			walletRepository.save(en);
+			
+			return BaseModelBuilder.success("Wallet rollback");
+		}else {
+			return BaseModelBuilder.error("404","Error updating wallet");
+		}
 		
-		walletRepository.save(en);
-		
-		return BaseModelBuilder.success("Wallet rollback");
 	}
 	
 }

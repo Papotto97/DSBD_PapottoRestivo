@@ -12,4 +12,5 @@ public interface WalletRepository extends JpaRepository<WalletEntity, UUID> {
 
 	List<WalletEntity> findAll();
 	WalletEntity findByUser(UserEntity user);
+	
 }
