@@ -10,7 +10,7 @@
 	</parent>
 	
 	<groupId>com.unict</groupId>
-	<artifactId>auctionmanager</artifactId>
+	<artifactId>walletmanager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>auctionmanager</name>
 	<description>Big Data &amp; Distributed Systems project by Papotto - Restivo</description>
