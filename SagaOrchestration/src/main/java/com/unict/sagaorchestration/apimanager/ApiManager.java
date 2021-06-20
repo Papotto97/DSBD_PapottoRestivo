@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -17,14 +16,14 @@ import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unict.sagaorchestration.exception.ApiManagerException;
 import com.unict.sagaorchestration.model.BaseModel;
+import com.unict.sagaorchestration.model.ClusterBean;
 import com.unict.sagaorchestration.model.Endpoint;
 import com.unict.sagaorchestration.model.MicroServices;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 @Component
 public class ApiManager {
@@ -34,24 +33,20 @@ public class ApiManager {
 	
 	private static ObjectMapper mapper;
 	private static HashMap<MicroServices,String> endpoints;
-//	private static ClusterBean cluster;
+	private static ClusterBean cluster;
 	BaseModel<?> baseModel;
 
 	@PostConstruct
 	private void construct() {
 		try {
-			mapper = new ObjectMapper(new JsonFactory());
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper = new ObjectMapper(new YAMLFactory());
 			InputStream input = ApiManager.class.getClassLoader().getResourceAsStream("api.yaml");
-			List<Endpoint> endpointList = mapper.readValue(input, new TypeReference<List<Endpoint>>() {});
-			HashMap<MicroServices, String> endpoints = new HashMap<>();
-			for(Endpoint tmp: endpointList) {
+			cluster=mapper.readValue(input,new TypeReference<ClusterBean>() { });
+			endpoints= new HashMap<MicroServices, String>();
+			for(Endpoint tmp:cluster.getEndpoint()) {
 				endpoints.put(MicroServices.valueOf(tmp.getMicroservice()), tmp.getUrl());
 			}
-//			cluster=mapper.readValue(input,new TypeReference<ClusterBean>() { });
-//			for(Endpoint tmp:cluster.getEndpoint()) {
-//				endpoints.put(MicroServices.valueOf(tmp.getMicroservice()), tmp.getUrl());
-//			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
