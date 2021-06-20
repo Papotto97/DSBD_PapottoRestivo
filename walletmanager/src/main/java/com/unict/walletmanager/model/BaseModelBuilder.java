@@ -1,22 +1,22 @@
 package com.unict.walletmanager.model;
 
+import org.springframework.http.HttpStatus;
+
 public final class BaseModelBuilder {
 
-	private BaseModelBuilder() {
-	}
-
-	public static <T> BaseModel<T> success( final T data ) {
+	public static <T> BaseModel<T> success(final T data) {
 		BaseModel<T> base = new BaseModel<T>();
 		base.setSuccess(true);
-		base.setData( data );
+		base.setData(data);
 		return base;
 	}
 
-	public static <T> BaseModel<T> error( final String errorCode, final String errorMessage ) {
+	public static <T> BaseModel<T> error(final HttpStatus errorCode, final String errorMessage) {
 		BaseModel<T> base = new BaseModel<T>();
-		ErrorModel error = new ErrorModel(errorCode,errorMessage);
-		base.setErrorCode(error);
+		ErrorModel error = new ErrorModel(errorCode, errorMessage);
+		base.setError(error);
 		base.setSuccess(false);
 		return base;
 	}
+	
 }

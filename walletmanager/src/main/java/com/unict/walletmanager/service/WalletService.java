@@ -3,6 +3,7 @@ package com.unict.walletmanager.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.unict.walletmanager.entity.UserEntity;
@@ -34,7 +35,7 @@ public class WalletService {
 			
 			return BaseModelBuilder.success("Wallet updated");
 		}else {
-			return BaseModelBuilder.error("404","Error updating wallet");
+			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Error updating wallet");
 		}
 		
 	}
@@ -52,7 +53,7 @@ public class WalletService {
 			
 			return BaseModelBuilder.success("Wallet rollback");
 		}else {
-			return BaseModelBuilder.error("404","Error updating wallet");
+			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Error updating wallet");
 		}
 		
 	}
