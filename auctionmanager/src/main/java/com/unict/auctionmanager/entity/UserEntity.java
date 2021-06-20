@@ -52,7 +52,7 @@ public class UserEntity implements Serializable {
 	private List<AuctionEntity> auctions;
 	
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private List<OfferHistory> offersHistory;
+	private List<OfferHistoryEntity> offersHistory;
 	
 	@OneToOne(mappedBy = "user")
 	private WalletEntity wallet;

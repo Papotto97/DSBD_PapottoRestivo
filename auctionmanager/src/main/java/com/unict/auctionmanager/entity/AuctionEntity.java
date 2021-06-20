@@ -85,7 +85,7 @@ public class AuctionEntity implements Serializable {
 	private UserEntity user;
 	
 	@OneToMany(mappedBy = "auction", fetch = FetchType.LAZY)
-	private List<OfferHistory> offersHistory;
+	private List<OfferHistoryEntity> offersHistory;
 	
 //	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "auction")
 //	private List<OfferHistory> offersHistory;
