@@ -1,4 +1,4 @@
-package com.unict.walletmanager.model;
+package com.unict.auctionmanager.model;
 
 import org.springframework.http.HttpStatus;
 
@@ -18,5 +18,5 @@ public final class BaseModelBuilder {
 		base.setSuccess(false);
 		return base;
 	}
-	
+
 }

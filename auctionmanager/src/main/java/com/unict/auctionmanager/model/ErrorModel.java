@@ -1,4 +1,4 @@
-package com.unict.walletmanager.model;
+package com.unict.auctionmanager.model;
 
 import java.io.Serializable;
 
@@ -29,4 +29,3 @@ public class ErrorModel implements Serializable{
 		return "ErrorModel [errorCode=" + errorCode.value() + ", errorMessage=" + errorMessage + "]";
 	}
 }
-

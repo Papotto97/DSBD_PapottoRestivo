@@ -6,8 +6,9 @@ import lombok.Data;
 public class AuctionBean {
 	
 	private String auctionId=null;
-	private String userId;
+	private Integer userId;
 	private Float stake;
-	private String currency;
+	private Integer currency=1;
+	private Integer itemId=null;	
 	
 }

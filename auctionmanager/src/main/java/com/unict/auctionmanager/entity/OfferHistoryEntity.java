@@ -23,7 +23,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "OfferHistory")
+@Entity(name = "OfferHistoryEntity")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @EqualsAndHashCode
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
-public class OfferHistory implements Serializable {
+public class OfferHistoryEntity implements Serializable {
 
 	private static final long serialVersionUID = -3621477088994698332L;
 

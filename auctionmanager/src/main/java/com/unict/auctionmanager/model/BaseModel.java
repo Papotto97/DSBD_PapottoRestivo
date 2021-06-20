@@ -1,4 +1,4 @@
-package com.unict.walletmanager.model;
+package com.unict.auctionmanager.model;
 
 import java.io.Serializable;
 

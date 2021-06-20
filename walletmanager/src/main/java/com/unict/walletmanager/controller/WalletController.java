@@ -1,7 +1,6 @@
 package com.unict.walletmanager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,23 +21,23 @@ public class WalletController {
 	@PostMapping("/set")
 	public ResponseEntity<?> set(@RequestBody AuctionBean bean){
 		BaseModel<?> baseModel = walletService.set(bean);
-		if(baseModel.isSuccess()) {
-			return ResponseEntity.ok(baseModel);
-		}else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(baseModel);
-		}
-		
+
+		return getResponse(baseModel);		
 	}
 	
 	@PostMapping("/rollback")
 	public ResponseEntity<?> rollback(@RequestBody AuctionBean bean){
 		BaseModel<?> baseModel = walletService.rollback(bean);
-		if(baseModel.isSuccess()) {
-			return ResponseEntity.ok(baseModel);
-		}else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(baseModel);
-		}
+
+		return getResponse(baseModel);
 	}
-	
+
+	private ResponseEntity<?> getResponse(BaseModel<?> resp) {
+
+		if (resp.isSuccess()) {
+			return ResponseEntity.ok(resp.getData());
+		} else
+			return ResponseEntity.status(resp.getError().getErrorCode()).body(resp.getError().getErrorMessage());
+	}	
 	
 }
