@@ -20,7 +20,7 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 	
 	@Override
 	public void configure() {
-		restConfiguration().component("undertow").port(8081);
+		restConfiguration().component("undertow").port(8082);
 		rest().path("/auction").post().type(AuctionBean.class).route()
 			.process(new CompressorProcessor()).to("kafka:auctions");
 		
