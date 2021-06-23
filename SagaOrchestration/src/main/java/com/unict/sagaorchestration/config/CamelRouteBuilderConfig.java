@@ -25,9 +25,10 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 			.process(new CompressorProcessor()).to("kafka:auctions");
 		
 		from("kafka:auctions")
+//		.bean(AuctionService.class)
 		.process(new CheckRequestProcessor())
 		.doTry()
-			.to("direct:createAuction")
+		.to("direct:createAuction")
 		.doCatch(SagaException.class)
 			.transform()
 			.simple("${exception}")
@@ -41,9 +42,9 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 			.option(headerAsset, body())
 			.compensation("direct:cancelAuction")
 			.completion("direct:completeAuction")
-				.to("direct:setAuction")
-				.to("direct:setWallet")
-				.end();
+			.to("direct:setAuction")
+			.to("direct:setWallet")
+			.end();
 		
 		from("direct:setAuction")
 		.saga()
