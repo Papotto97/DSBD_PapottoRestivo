@@ -54,10 +54,9 @@ public class ApiManager {
 	public void dispositiveAction(MicroServices microservice, String endpoint, HttpMethod method, Object data) throws ApiManagerException, URISyntaxException{
 		URI uri = new URI(endpoints.get(microservice)+endpoint);
 		RequestEntity<?> request = getRequestEntity(method,data,uri,null);
-		ParameterizedTypeReference<BaseModel<?>> myBean =
-				new ParameterizedTypeReference<BaseModel<?>>() {};
-				baseModel = (BaseModel<?>) restTemplate.exchange(request,myBean).getBody();
-				if(!baseModel.isSuccess()) throw new ApiManagerException(baseModel.getErrorCode().getErrorCode(),baseModel.getErrorCode().getErrorMessage());
+		ParameterizedTypeReference<BaseModel<?>> myBean = new ParameterizedTypeReference<BaseModel<?>>() {};
+		baseModel = (BaseModel<?>) restTemplate.exchange(request,myBean).getBody();
+		if(!baseModel.isSuccess()) throw new ApiManagerException(baseModel.getErrorCode().getErrorCode(),baseModel.getErrorCode().getErrorMessage());
 	}
 	
 	private RequestEntity<?> getRequestEntity(HttpMethod method,Object data,URI uri,String token) throws URISyntaxException {

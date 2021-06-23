@@ -102,7 +102,7 @@ public class AuctionService {
 						return BaseModelBuilder.success(bean);
 
 					} else
-						return BaseModelBuilder.error(HttpStatus.NOT_MODIFIED, "The start price is higher than the proposed one");
+						return BaseModelBuilder.error(HttpStatus.BAD_REQUEST, "The start price is higher than the proposed one");
 
 				} else
 					return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Item not found");
