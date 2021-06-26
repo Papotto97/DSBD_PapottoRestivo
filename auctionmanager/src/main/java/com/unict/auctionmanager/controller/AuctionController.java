@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unict.auctionmanager.model.AuctionBean;
 import com.unict.auctionmanager.model.BaseModel;
-import com.unict.auctionmanager.model.BaseModelBuilder;
 import com.unict.auctionmanager.service.AuctionService;
 
 @RestController
