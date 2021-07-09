@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: auctionmanager
+spec: 
+  selector: 
+    matchLabels: 
+      app: auctionmanager
+  replicas: 1
+  template:
+    metadata: 
+        labels: 
+            app: auctionmanager
+    spec: 
+      containers: 
+      - name: auctionmanager
+        image: auctionmanager:1.0
+        ports: 
+        - containerPort: 8083
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auctionmanager-service
+spec:
+  selector:
+    app: auctionmanager-service
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083

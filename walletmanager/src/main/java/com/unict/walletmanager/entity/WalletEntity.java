@@ -40,7 +40,7 @@ public class WalletEntity implements Serializable {
 	@Column(name = "USER_ID", columnDefinition = "integer NOT NULL")
 	private Integer userId;
 	
-	@Column(name = "CURRENCY", columnDefinition = "integer NOT NULL")
+	@Column(name = "CURRENCY_ID", columnDefinition = "integer NOT NULL")
 	private Integer currencyId;
 
 	@Column(name = "DISPOSABILITY", columnDefinition = "real NOT NULL DEFAULT 0")
@@ -56,7 +56,7 @@ public class WalletEntity implements Serializable {
 	private UserEntity user;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "CURRENCY", referencedColumnName = "ID", insertable = false, updatable = false, nullable = false)
+	@JoinColumn(name = "CURRENCY_ID", referencedColumnName = "ID", insertable = false, updatable = false, nullable = false)
 	@JsonBackReference
 	private CurrencyEntity currency;
 

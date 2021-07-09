@@ -1,0 +1,21 @@
+install minikube
+
+minikube start
+minkube dashboard
+
+kubectl apply -f postgres.yaml
+kubectl apply -f pgadmin.yaml
+
+minikube addons enable registry
+docker run --rm -it --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:52081,reuseaddr,fork TCP:host.docker.internal:52081"
+
+IN ./auctionmanager -> docker build -t auctionmanager:1.0 .
+--docker tag auctionmanager:1.0 localhost:52081/auctionmanager:1.0
+
+#minikube load auctionmanager:1.0
+--docker push localhost:52081/auctionmanager:1.0
+
+kubectl apply -f postgres.yaml
+
+
+

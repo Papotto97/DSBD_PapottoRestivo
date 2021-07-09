@@ -46,7 +46,7 @@ public class ItemEntity implements Serializable {
 	@Column(name = "START_PRICE", columnDefinition = "real DEFAULT 0")
 	private Float startPrice;
 	
-	@Column(name = "CURRENCY", columnDefinition = "integer NOT NULL")
+	@Column(name = "CURRENCY_ID", columnDefinition = "integer NOT NULL")
 	private Integer currency;
 	
 	@Column(name = "AUCTION_HOUR", columnDefinition = "integer NOT NULL")

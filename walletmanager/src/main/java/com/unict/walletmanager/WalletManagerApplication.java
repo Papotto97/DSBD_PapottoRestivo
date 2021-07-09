@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AuctionManagerApplication {
+public class WalletManagerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AuctionManagerApplication.class, args);
+		SpringApplication.run(WalletManagerApplication.class, args);
 	}
 
 }
