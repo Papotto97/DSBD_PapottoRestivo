@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment 
 metadata: 
-  name: walletmanager
+  name: gateway
 spec: 
   selector: 
     matchLabels: 
-      app: walletmanager
+      app: gateway
   replicas: 1
   template:
     metadata: 
         labels: 
-            app: walletmanager
+            app: gateway
     spec: 
       containers: 
-      - name: walletmanager
-        image: walletmanager:2.0
+      - name: gateway
+        image: gateway-service:1.0
         ports: 
-        - containerPort: 8084
+        - containerPort: 8088
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: walletmanager-service
+  name: gateway-service
 spec:
   selector:
-    app: walletmanager-service
+    app: gateway
   ports:
     - protocol: TCP
-      port: 8084
-      targetPort: 8084
+      port: 8088
+      targetPort: 8088
