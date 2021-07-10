@@ -1,21 +1,44 @@
 install minikube
 
-minikube start
+minikube start --cpus 4 --memory 4096
 minkube dashboard
 
 kubectl apply -f postgres.yaml
 kubectl apply -f pgadmin.yaml
 
-minikube addons enable registry
-docker run --rm -it --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:52081,reuseaddr,fork TCP:host.docker.internal:52081"
+minikube service pgadmin -> (username: lucarest94@gmail.com password: admin)
+CREATE SERVER -> host: postgres:5432 password: root
+CREATE DATABASE DSBD
+CREATE TABLES
+INSERT INTO TABLES
+
+minikube image load wurstmeister/zookeeper
+kubectl apply -f kafka.yml
 
 IN ./auctionmanager -> docker build -t auctionmanager:1.0 .
---docker tag auctionmanager:1.0 localhost:52081/auctionmanager:1.0
+minikube image load auctionmanager:1.0
+##in alternativa -> 
+##minikube addons enable registry
+##docker run --rm -it --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:52081,reuseaddr,fork TCP:host.docker.internal:52081"
+##--docker tag auctionmanager:1.0 localhost:52081/auctionmanager:1.0
+##--docker push localhost:52081/auctionmanager:1.0
 
-#minikube load auctionmanager:1.0
---docker push localhost:52081/auctionmanager:1.0
+kubectl apply -f auctionmanager.yml
 
-kubectl apply -f postgres.yaml
+IN ./walletmanager -> docker build -t walletmanager:1.0 .
+minikube image load walletmanager:1.0
+kubectl apply -f walletmanager.yml
 
+IN ./lra-coordinator -> docker build -t lra-coordinator:1.0 .
+minikube image load lra-coordinator:1.0
+kubectl apply -f lra-coordinator.yml
 
+IN ./sagaorchestration -> docker build -t sagaorchestration:1.0 .
+minikube image load sagaorchestration:1.0
+kubectl apply -f sagaorchestration.yml
 
+kubectl apply -f kafka1-ingress.yml
+OPEN c:\Windows\System32\Drivers\etc\hosts -> ADD ROW: <your minikube ip> kafka1-ingress
+													   (ex. 192.168.49.2)
+
+minikube ssh -> curl --header "Content-Type: application/json" --request POST --data '{"auctionId": "sporchi", "userId": "peppefetish", "stake": "stake", "currency": 1, "itemId": null}' http://kafka1-ingress/auction

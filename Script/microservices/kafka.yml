@@ -81,11 +81,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka1
+  name: kafka1-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
-  - port: 8080
+  - port: 9092
   selector:
     app: kafka1     
 

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: sagaorchestration
+spec: 
+  selector: 
+    matchLabels: 
+      app: sagaorchestration
+  replicas: 1
+  template:
+    metadata: 
+        labels: 
+            app: sagaorchestration
+    spec: 
+      containers: 
+      - name: sagaorchestration
+        image: sagaorchestration:1.2
+        ports: 
+        - containerPort: 8081
+        - containerPort: 8082
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sagaorchestration-service
+spec:
+  selector:
+    app: sagaorchestration-service
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
