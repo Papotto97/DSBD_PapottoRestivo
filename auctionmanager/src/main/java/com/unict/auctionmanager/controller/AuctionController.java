@@ -2,6 +2,7 @@ package com.unict.auctionmanager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,13 @@ public class AuctionController {
 	@PostMapping("/rollback")
 	public ResponseEntity<?> rollback(@RequestBody AuctionBean bean) {
 		BaseModel<?> resp = auctionService.rollback(bean);
+
+		return getResponse(resp);
+	}
+	
+	@GetMapping("/auctions")
+	public ResponseEntity<?> auctions(@RequestBody AuctionBean bean) {
+		BaseModel<?> resp = auctionService.getAuctions(bean);
 
 		return getResponse(resp);
 	}

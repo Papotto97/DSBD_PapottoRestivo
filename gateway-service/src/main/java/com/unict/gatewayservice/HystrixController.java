@@ -1,4 +1,4 @@
-package com.devglan.gatewayservice;
+package com.unict.gatewayservice;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,9 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/fallback")
 public class HystrixController {
 
-    @GetMapping("/first")
+    @GetMapping("/auction-manager")
     public String firstServiceFallback(){
-        return "This is a fallback for first service.";
+        return "This is a fallback for auction-manager.";
+    }
+
+    @GetMapping("/sagaorchestration")
+    public String sagaorchestrationFallback(){
+        return "This is a fallback for sagaorchestration.";
     }
 
     @GetMapping("/second")

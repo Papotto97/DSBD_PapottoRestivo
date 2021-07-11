@@ -184,5 +184,21 @@ public class AuctionService {
 		} else
 			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "User not found");
 	}
+	
+	public BaseModel<?> getAuctions (AuctionBean bean) {
+		
+		if (bean.getUserId() == null) {
+			return BaseModelBuilder.error(HttpStatus.BAD_REQUEST, "User id is mandatory");
+		}
+
+		Optional<UserEntity> optUser = repositoryFactory.getUserRepository().findById(bean.getUserId());
+
+		if (optUser.isPresent()) {
+			return BaseModelBuilder.success(optUser.get().getAuctions());
+		}
+		else
+			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "User not found");
+		
+	}
 
 }
