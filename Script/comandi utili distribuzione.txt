@@ -37,8 +37,17 @@ IN ./sagaorchestration -> docker build -t sagaorchestration:1.0 .
 minikube image load sagaorchestration:1.0
 kubectl apply -f sagaorchestration.yml
 
+
+IN ./gateway-service -> docker build -t gateway-service:1.0 .
+minikube image load gateway-service:1.0
+kubectl apply -f gateway-service.yml
+
+IN ./discovery-service -> docker build -t discovery-service:1.0 .
+minikube image load discovery-service:1.0
+kubectl apply -f discovery-service.yml
+
 kubectl apply -f kafka1-ingress.yml
 OPEN c:\Windows\System32\Drivers\etc\hosts -> ADD ROW: <your minikube ip> kafka1-ingress
-													   (ex. 192.168.49.2)
+						      (ex. 192.168.49.2)
 
-minikube ssh -> curl --header "Content-Type: application/json" --request POST --data '{"auctionId": "sporchi", "userId": "peppefetish", "stake": "stake", "currency": 1, "itemId": null}' http://kafka1-ingress/auction
+minikube ssh -> curl --header "Content-Type: application/json" --request POST --data '{"auctionId": "sporchi", "userId": 1,"stake": "stake", "currency": 1, "itemId": null}' http://gateway-ingress/auction

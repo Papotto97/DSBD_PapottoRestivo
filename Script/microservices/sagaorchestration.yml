@@ -14,19 +14,19 @@ spec:
     spec: 
       containers: 
       - name: sagaorchestration
-        image: sagaorchestration:2.0
+        image: sagaorchestration:3.5
         ports: 
-        - containerPort: 8082
+        - containerPort: 8081
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: sagaorchestration-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
-    app: sagaorchestration-service
+    app: sagaorchestration
   ports:
     - protocol: TCP
-      port: 8082
-      targetPort: 8082
+      port: 8081
+      targetPort: 8081

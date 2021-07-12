@@ -14,7 +14,7 @@ spec:
     spec: 
       containers: 
       - name: walletmanager
-        image: walletmanager:2.0
+        image: walletmanager:3.3
         ports: 
         - containerPort: 8084
 ---
@@ -24,7 +24,7 @@ metadata:
   name: walletmanager-service
 spec:
   selector:
-    app: walletmanager-service
+    app: walletmanager
   ports:
     - protocol: TCP
       port: 8084

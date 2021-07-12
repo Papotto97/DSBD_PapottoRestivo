@@ -14,7 +14,7 @@ spec:
     spec: 
       containers: 
       - name: auctionmanager
-        image: auctionmanager:2.0
+        image: auctionmanager:3.3
         ports: 
         - containerPort: 8083
 ---
@@ -24,7 +24,7 @@ metadata:
   name: auctionmanager-service
 spec:
   selector:
-    app: auctionmanager-service
+    app: auctionmanager
   ports:
     - protocol: TCP
       port: 8083

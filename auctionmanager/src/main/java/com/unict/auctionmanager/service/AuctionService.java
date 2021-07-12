@@ -1,5 +1,6 @@
 package com.unict.auctionmanager.service;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import com.unict.auctionmanager.entity.AuctionEntity;
 import com.unict.auctionmanager.entity.ItemEntity;
 import com.unict.auctionmanager.entity.OfferHistoryEntity;
 import com.unict.auctionmanager.entity.UserEntity;
+import com.unict.auctionmanager.entity.WalletEntity;
 import com.unict.auctionmanager.factory.RepositoryFactory;
 import com.unict.auctionmanager.model.AuctionBean;
 import com.unict.auctionmanager.model.BaseModel;
@@ -41,29 +43,37 @@ public class AuctionService {
 				Optional<AuctionEntity> opt = repositoryFactory.getAuctionRepository().findById(uuid);
 				if (opt.isPresent()) {
 					auEntity = opt.get();
-
-					if (auEntity.getLastOffer() < bean.getStake()) {
-
-						auEntity.setUpdateTimestamp(new Date());
-						auEntity.setLastOffer(bean.getStake());
-						auEntity.setUserId(bean.getUserId());
-
-						CONTROLLARE SE LA OFFER è COMPLETA O NO
-						
-						// INSERT ON OFFER_HISTORY
-						ohEntity = OfferHistoryEntity.builder()
-								.auctionId(uuid)
-								.userId(bean.getUserId())
-								.stake(bean.getStake())
-								.timestamp(new Date())
-								.build();
-
-						repositoryFactory.getAuctionRepository().save(auEntity);
-						repositoryFactory.getOfferHistoryRepository().save(ohEntity);
-
-						return BaseModelBuilder.success(bean);
+					if(auEntity.getEndTimestamp().after(new Date())) {
+	
+						if (auEntity.getLastOffer() < bean.getStake()) {
+							
+							WalletEntity wallet = repositoryFactory.getWalletRepository().findByUser(auEntity.getUser());
+							wallet.setActualStaked(wallet.getActualStaked() - auEntity.getLastOffer());
+							wallet.setDisponsability(wallet.getDisponsability() + auEntity.getLastOffer());
+							
+							repositoryFactory.getWalletRepository().save(wallet);
+							
+							auEntity.setUpdateTimestamp(new Date());
+							auEntity.setLastOffer(bean.getStake());
+							auEntity.setUserId(bean.getUserId());
+	
+							
+							// INSERT ON OFFER_HISTORY
+							ohEntity = OfferHistoryEntity.builder()
+									.auctionId(uuid)
+									.userId(bean.getUserId())
+									.stake(bean.getStake())
+									.timestamp(new Date())
+									.build();
+	
+							repositoryFactory.getAuctionRepository().save(auEntity);
+							repositoryFactory.getOfferHistoryRepository().save(ohEntity);
+	
+							return BaseModelBuilder.success(bean);
+						} else
+							return BaseModelBuilder.error(HttpStatus.BAD_REQUEST, "The current stake is higher than the proposed one", bean);
 					} else
-						return BaseModelBuilder.error(HttpStatus.BAD_REQUEST, "The current stake is higher than the proposed one", bean);
+						return BaseModelBuilder.error(HttpStatus.BAD_REQUEST, "Auction has already ended", bean);
 
 				} else
 					return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Auction not found", bean);

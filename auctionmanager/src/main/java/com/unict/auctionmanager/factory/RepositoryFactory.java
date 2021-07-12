@@ -7,6 +7,7 @@ import com.unict.auctionmanager.repository.AuctionRepository;
 import com.unict.auctionmanager.repository.ItemRepository;
 import com.unict.auctionmanager.repository.OfferHistoryRepository;
 import com.unict.auctionmanager.repository.UserRepository;
+import com.unict.auctionmanager.repository.WalletRepository;
 
 import lombok.Getter;
 
@@ -25,5 +26,8 @@ public class RepositoryFactory {
 	
 	@Autowired
 	private ItemRepository itemRepository;
+	
+	@Autowired
+	private WalletRepository walletRepository;
 
 }

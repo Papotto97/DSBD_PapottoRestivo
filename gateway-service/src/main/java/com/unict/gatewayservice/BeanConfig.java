@@ -25,14 +25,16 @@ public class BeanConfig {
                                 .hystrix(c -> c.setName("hystrix")
                                         .setFallbackUri("forward:/fallback/sagaorchestration")))
                         .uri("lb://SAGAORCHESTRATION/")
-                        .id("auction-manager"))
+                        .id("sagaorchestration"))
+                
+                .route(r -> r.path("/api/v1/wallet/**")
+                        .filters(f -> f.rewritePath("/api/v1/wallet/(?<remains>.*)", "/${remains}")
+                                .addRequestHeader("X-first-Header", "wallet-manager-header")
+                                .hystrix(c -> c.setName("hystrix")
+                                        .setFallbackUri("forward:/fallback/wallet-manager")))
+                        .uri("lb://WALLET-MANAGER/")
+                        .id("wallet-manager"))
 
-//                .route(r -> r.path("/api/v1/second/**")
-//                        .filters(f -> f.rewritePath("/api/v1/second/(?<remains>.*)", "/${remains}")
-//                                .hystrix(c -> c.setName("hystrix")
-//                                        .setFallbackUri("forward:/fallback/second")))
-//                        .uri("lb://SECOND-SERVICE/")
-//                        .id("second-service"))
                 .build();
     }
 

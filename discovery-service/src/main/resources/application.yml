@@ -3,13 +3,15 @@ spring:
     name: discovery-service
 
 eureka:
+  instance:
+     preferIpAddress: true
   client:
     eureka-server-connect-timeout-seconds: 5
     enabled: true
     fetch-registry: false
     register-with-eureka: false
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-service:8761/eureka
 
 server:
   port: 8761
