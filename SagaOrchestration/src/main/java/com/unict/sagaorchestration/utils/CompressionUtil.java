@@ -12,7 +12,7 @@ public class CompressionUtil {
 
 	public static String compressAndReturnB64(String text) throws IOException {
 		String result =new String(Base64.getEncoder().encode(compress(text)));
-		return result;   
+		return result;
 	}
 
 	public static String decompressB64(String b64Compressed) throws IOException {

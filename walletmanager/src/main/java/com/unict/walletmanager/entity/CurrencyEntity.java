@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -31,7 +33,8 @@ public class CurrencyEntity  implements Serializable {
 	private static final long serialVersionUID = 4406814940077633926L;
 	
 	@Id
-	@Column(name = "ID", columnDefinition = "integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 )")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Integer id;
 	
 	@Column(name = "SYMBOL", columnDefinition = "character varying(5) NOT NULL")

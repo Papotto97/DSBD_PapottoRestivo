@@ -36,14 +36,19 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
         .port(env.getProperty("server.port", "8081"))
         .bindingMode(RestBindingMode.json);
 
-		rest("/auction").id("set-auction").post().type(AuctionBean.class).route()
+		rest("/auction").id("set-auction").post().consumes("application/json")
+			.type(AuctionBean.class)
+			.route()
 			.process(new CompressorProcessor()).to("kafka:auctions");
 		
 		from("kafka:auctions")
-		.bean(AuctionService.class)
+//		.bean(AuctionService.class)
+		.log("--------------PRE PROCESS--------------")
 		.process(new CheckRequestProcessor())
+		.log("--------------POST PROCESS-------------")
 		.doTry()
-		.to("direct:createAuction")
+			.log("--------------CALLING SAGA PROCESS-------------")
+			.to("direct:createAuction")
 		.doCatch(SagaException.class)
 			.transform()
 			.simple("${exception}")
@@ -51,7 +56,9 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 		.endDoTry();
 		
 		from("direct:createAuction")
+		.log("--------------SAGA PROCESS-------------")
 		.saga()//<- new saga lra-coordinator/startNewSaga http request
+			.log("--------------INIT SAGA-------------")
 			.timeout(5, TimeUnit.MINUTES) 
 			.propagation(SagaPropagation.REQUIRES_NEW)
 			.option(headerAsset, body())
@@ -59,6 +66,7 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 			.completion("direct:completeAuction")
 			.to("direct:setAuction")
 			.to("direct:setWallet")
+			.log("--------------END PROCESS-------------")
 			.end();
 		
 		from("direct:setAuction")

@@ -27,7 +27,7 @@ public class AuctionService {
 		ObjectMapper mapper = new ObjectMapper();
 		String compressedpayload=exchange.getIn().getBody(String.class);
 		String payload=CompressionUtil.decompressB64(compressedpayload);
-		AuctionBean bean = mapper.readValue(payload.getBytes(), AuctionBean.class);;
+		AuctionBean bean = mapper.readValue(payload.getBytes(), AuctionBean.class);
 		System.out.print("Updating auction "+bean.getAuctionId()+"\n");
 		apiManager.dispositiveAction(MicroServices.Auction, "/auction/set", HttpMethod.POST, bean);
 	}

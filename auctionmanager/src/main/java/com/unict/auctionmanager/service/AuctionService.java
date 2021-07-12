@@ -55,8 +55,8 @@ public class AuctionService {
 								.stake(bean.getStake())
 								.build();
 
-						repositoryFactory.getOfferHistoryRepository().save(ohEntity);
 						repositoryFactory.getAuctionRepository().save(auEntity);
+						repositoryFactory.getOfferHistoryRepository().save(ohEntity);
 
 						return BaseModelBuilder.success(bean);
 					} else
@@ -96,8 +96,8 @@ public class AuctionService {
 								.stake(bean.getStake())
 								.build();
 
-						repositoryFactory.getOfferHistoryRepository().save(ohEntity);
 						repositoryFactory.getAuctionRepository().save(auEntity);
+						repositoryFactory.getOfferHistoryRepository().save(ohEntity);
 
 						return BaseModelBuilder.success(bean);
 
@@ -168,8 +168,8 @@ public class AuctionService {
 								.findByAuctionIdAndUserIdAndStake(optOldAuction.get().getId(), bean.getUserId(), bean.getStake());
 						
 						if (optOldOH.isPresent()) {
-							repositoryFactory.getAuctionRepository().delete(optOldAuction.get());
 							repositoryFactory.getOfferHistoryRepository().delete(optOldOH.get());
+							repositoryFactory.getAuctionRepository().delete(optOldAuction.get());
 							
 							return BaseModelBuilder.success(bean);
 						} else
