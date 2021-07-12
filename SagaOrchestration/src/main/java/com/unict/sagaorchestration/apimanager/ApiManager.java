@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -55,8 +56,16 @@ public class ApiManager {
 		URI uri = new URI(endpoints.get(microservice)+endpoint);
 		RequestEntity<?> request = getRequestEntity(method,data,uri,null);
 		ParameterizedTypeReference<BaseModel<?>> myBean = new ParameterizedTypeReference<BaseModel<?>>() {};
-		baseModel = (BaseModel<?>) restTemplate.exchange(request,myBean).getBody();
-		if(!baseModel.isSuccess()) throw new ApiManagerException(baseModel.getErrorCode().getErrorCode(),baseModel.getErrorCode().getErrorMessage());
+		ResponseEntity<?> resp = restTemplate.exchange(request,myBean);
+//		baseModel = (BaseModel<?>) restTemplate.exchange(request,myBean).getBody();
+		if (!resp.getStatusCode().is2xxSuccessful()) {
+			throw new ApiManagerException(Integer.toString(resp.getStatusCodeValue()), resp.getStatusCode().getReasonPhrase());
+		}
+		else {
+			baseModel = (BaseModel<?>) resp.getBody();
+			if(!baseModel.isSuccess()) 
+				throw new ApiManagerException(Integer.toString(baseModel.getError().getErrorCode().value()), baseModel.getError().getErrorMessage());
+		}
 	}
 	
 	private RequestEntity<?> getRequestEntity(HttpMethod method,Object data,URI uri,String token) throws URISyntaxException {

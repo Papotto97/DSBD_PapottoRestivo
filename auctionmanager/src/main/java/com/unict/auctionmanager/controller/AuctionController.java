@@ -46,9 +46,7 @@ public class AuctionController {
 		if (resp.isSuccess()) {
 			return ResponseEntity.ok(resp);
 		} else
-//			return ResponseEntity.status(resp.getError().getErrorCode()).body(resp.getError().getErrorMessage());
 			return new ResponseEntity<BaseModel>(resp, resp.getError().getErrorCode());
-		// .status(resp.getError().getErrorCode()).body(BaseModelBuilder.error(resp.getError().getErrorCode(), ));
 	}
 
 //	@GetMapping("/create")

@@ -1,4 +1,4 @@
-package com.unict.walletmanager.model;
+package com.unict.sagaorchestration.model;
 
 import org.springframework.http.HttpStatus;
 

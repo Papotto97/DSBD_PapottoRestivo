@@ -62,14 +62,15 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 			.timeout(5, TimeUnit.MINUTES) 
 			.propagation(SagaPropagation.REQUIRES_NEW)
 			.option(headerAsset, body())
-			.compensation("direct:cancelAuction")
-			.completion("direct:completeAuction")
 			.to("direct:setAuction")
 			.to("direct:setWallet")
+			.compensation("direct:cancelAuction")
+			.completion("direct:completeAuction")
 			.log("--------------END PROCESS-------------")
 			.end();
 		
 		from("direct:setAuction")
+        .log("--------------setAuction-------------")
 		.saga()
 		.propagation(SagaPropagation.SUPPORTS)
 		.compensation("direct:cancelauction")
@@ -77,6 +78,7 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 		.option(headerAsset, body());
 
 		from("direct:setWallet")
+        .log("--------------setWallet-------------")
 		.saga()
 		.propagation(SagaPropagation.SUPPORTS)
 		.compensation("direct:cancelwalletupdate")
@@ -85,16 +87,22 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 		
 		from("direct:completeAuction")
 		.transform(header(headerAsset))
+        .log("--------------completeAuction-------------")
 		.log("all done!");
 		
 		from("direct:cancelAuction")
 		.transform(header(headerAsset))
+        .log("--------------cancelAuction-------------")
 		.bean(AuctionService.class, "rollback");
 		
 		from("direct:cancelwalletupdate")
 		.transform(header(headerAsset))
+        .log("--------------cancelwalletupdate-------------")
 		.bean(WalletService.class, "rollback");
 
-
+		from("direct:cancelauction")
+        .transform(header(headerAsset))
+        .log("--------------cancelauction-------------")
+        .log("exception generate : ${body}");
 	}
 }

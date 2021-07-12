@@ -35,9 +35,9 @@ public class WalletController {
 	private ResponseEntity<?> getResponse(BaseModel<?> resp) {
 
 		if (resp.isSuccess()) {
-			return ResponseEntity.ok(resp.getData());
+			return ResponseEntity.ok(resp);
 		} else
-			return ResponseEntity.status(resp.getError().getErrorCode()).body(resp.getError().getErrorMessage());
-	}	
+			return new ResponseEntity<BaseModel>(resp, resp.getError().getErrorCode());
+	}
 	
 }

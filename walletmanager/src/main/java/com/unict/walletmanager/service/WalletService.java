@@ -33,9 +33,9 @@ public class WalletService {
 			
 			walletRepository.save(en);
 			
-			return BaseModelBuilder.success("Wallet updated");
+			return BaseModelBuilder.success(bean);
 		}else {
-			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Error updating wallet");
+			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Error updating wallet", bean);
 		}
 		
 	}
@@ -51,9 +51,9 @@ public class WalletService {
 			
 			walletRepository.save(en);
 			
-			return BaseModelBuilder.success("Wallet rollback");
+			return BaseModelBuilder.success(bean);
 		}else {
-			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Error updating wallet");
+			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Error updating wallet", bean);
 		}
 		
 	}

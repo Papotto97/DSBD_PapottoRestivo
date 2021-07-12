@@ -48,11 +48,14 @@ public class AuctionService {
 						auEntity.setLastOffer(bean.getStake());
 						auEntity.setUserId(bean.getUserId());
 
+						CONTROLLARE SE LA OFFER è COMPLETA O NO
+						
 						// INSERT ON OFFER_HISTORY
 						ohEntity = OfferHistoryEntity.builder()
 								.auctionId(uuid)
 								.userId(bean.getUserId())
 								.stake(bean.getStake())
+								.timestamp(new Date())
 								.build();
 
 						repositoryFactory.getAuctionRepository().save(auEntity);
@@ -60,10 +63,10 @@ public class AuctionService {
 
 						return BaseModelBuilder.success(bean);
 					} else
-						return BaseModelBuilder.error(HttpStatus.NOT_MODIFIED, "The current stake is higher than the proposed one");
+						return BaseModelBuilder.error(HttpStatus.BAD_REQUEST, "The current stake is higher than the proposed one", bean);
 
 				} else
-					return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Auction not found");
+					return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Auction not found", bean);
 			}
 			// CREATE AUCTION
 			else {
@@ -94,6 +97,7 @@ public class AuctionService {
 								.auctionId(newUUID)
 								.userId(bean.getUserId())
 								.stake(bean.getStake())
+								.timestamp(new Date())
 								.build();
 
 						repositoryFactory.getAuctionRepository().save(auEntity);
@@ -102,13 +106,13 @@ public class AuctionService {
 						return BaseModelBuilder.success(bean);
 
 					} else
-						return BaseModelBuilder.error(HttpStatus.BAD_REQUEST, "The start price is higher than the proposed one");
+						return BaseModelBuilder.error(HttpStatus.BAD_REQUEST, "The start price is higher than the proposed one", bean);
 
 				} else
-					return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Item not found");
+					return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Item not found", bean);
 			}
 		} else
-			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "User not found");
+			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "User not found", bean);
 
 	}
 
@@ -146,13 +150,13 @@ public class AuctionService {
 							return BaseModelBuilder.success(bean);
 							
 						} else
-							return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Old offer values not found");
+							return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Old offer values not found", bean);
 						
 					} else
-						return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Old offer not found");
+						return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Old offer not found", bean);
 
 				} else
-					return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Auction not found");
+					return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Auction not found", bean);
 			}
 			// CREATE AUCTION
 			else {
@@ -173,22 +177,22 @@ public class AuctionService {
 							
 							return BaseModelBuilder.success(bean);
 						} else
-							return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Old offer not found");
+							return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Old offer not found", bean);
 
 					} else
-						return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Old auction not found");
+						return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Old auction not found", bean);
 
 				} else
-					return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Item not found");
+					return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Item not found", bean);
 			}
 		} else
-			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "User not found");
+			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "User not found", bean);
 	}
 	
 	public BaseModel<?> getAuctions (AuctionBean bean) {
 		
 		if (bean.getUserId() == null) {
-			return BaseModelBuilder.error(HttpStatus.BAD_REQUEST, "User id is mandatory");
+			return BaseModelBuilder.error(HttpStatus.BAD_REQUEST, "User id is mandatory", bean);
 		}
 
 		Optional<UserEntity> optUser = repositoryFactory.getUserRepository().findById(bean.getUserId());
@@ -197,7 +201,7 @@ public class AuctionService {
 			return BaseModelBuilder.success(optUser.get().getAuctions());
 		}
 		else
-			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "User not found");
+			return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "User not found", bean);
 		
 	}
 
