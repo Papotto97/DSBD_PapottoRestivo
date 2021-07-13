@@ -12,6 +12,7 @@ import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,7 @@ import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 import com.unict.auctionmanager.job.CustomQuartzJob;
 import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;				
+import com.zaxxer.hikari.HikariDataSource;
 
 
 @Configuration
@@ -36,7 +37,7 @@ public class QuartzConfig
     @Autowired
 	private ApplicationContext applicationContext;
 
-    @Value("#{T(com.islamicbanking.common.bureau.config.ResourceReader).readFileToString('classpath:quartz.properties')}")
+    @Value("#{T(com.unict.auctionmanager.config.quartz.ResourceReader).readFileToString('classpath:quartz.properties')}")
     private String resource;
 
     @Value("${org.quartz.uri}")
@@ -50,6 +51,9 @@ public class QuartzConfig
 
     @Value("${org.quartz.cron.default}")
     private static String defaultCron;
+    
+	private static final String CRON_EVERY_FIVE_MINUTES = "0 */1 * ? * *";
+
 
     private DataSource dataSourceQRTZ() {
         HikariConfig cpConfig = new HikariConfig();
@@ -119,7 +123,7 @@ public class QuartzConfig
     
   @Bean(name = "memberClassStats")
   public JobDetailFactoryBean jobMemberClassStats() {
-      return QuartzConfig.createJobDetail(CustomQuartzJob.class, "Class Statistics Job");
+      return QuartzConfig.createJobDetail(CustomQuartzJob.class, "ClassStatisticsJob");
   }
     
     static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail, long pollFrequencyMs, String triggerName) {
@@ -134,7 +138,14 @@ public class QuartzConfig
 
         return factoryBean;
     }
-
+    
+    
+    @Bean(name = "memberClassStatsTrigger")
+    public CronTriggerFactoryBean triggerMemberClassStats(@Qualifier("memberClassStats") JobDetail jobDetail) {
+        //return QuartzConfig.createCronTrigger(jobDetail, "Class Statistics Trigger");
+        return QuartzConfig.createCronTrigger(jobDetail, CRON_EVERY_FIVE_MINUTES, "ClassStatisticsTrigger");
+    }
+    
     static CronTriggerFactoryBean createCronTrigger(JobDetail jobDetail, String cronExpression, String triggerName) {
     //static CronTriggerFactoryBean createCronTrigger(JobDetail jobDetail, String triggerName) {
 
@@ -145,8 +156,8 @@ public class QuartzConfig
 
         CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
         factoryBean.setJobDetail(jobDetail);
-        //factoryBean.setCronExpression(defaultCron); //TODO check sul db la cron expression valida
         factoryBean.setCronExpression(cronExpression); //TODO check sul db la cron expression valida
+//        factoryBean.setCronExpression(cronExpression); //TODO check sul db la cron expression valida
         factoryBean.setStartTime(calendar.getTime());
         factoryBean.setStartDelay(0L);
         factoryBean.setName(triggerName);

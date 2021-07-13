@@ -18,7 +18,7 @@ public interface AuctionRepository extends JpaRepository<AuctionEntity, UUID> {
 	@Query("select au from AuctionEntity au where au.itemId = ?1 and au.userId = ?2 and au.currencyId = ?3 and au.lastOffer = ?4 order by au.updateTimestamp")
 	Optional<AuctionEntity> findFirstByItemIdAndUserIdAndCurrencyIdAndLastOfferOderderByUpdateTimestamp(Integer itemId, Integer userId, Integer currencyId, Float lastOffer);	
 	
-	List<AuctionEntity> findByCompletedFalse();	
+	List<AuctionEntity> findByCompletedFalseAndEndTimestampIsNotNull();	
 
 //	Optional<AuctionEntity> findFirstByItemIdAndUserIdAndCurrencyIdAndLastOffer(Integer itemId, Integer userId, Integer currencyId, Float lastOffer);
 	
