@@ -13,5 +13,4 @@ CREATE TABLE "USER" (
 	CONSTRAINT "USER_pkey" PRIMARY KEY ("ID")
 );
 
-INSERT INTO "USER" ("ID","EMAIL","USERNAME","NAME","SURNAME") OVERRIDING SYSTEM VALUE VALUES
-	 (1,'pippo@pippo.it','pippo','pippo','pluto');
+INSERT INTO "USER" ("ID","EMAIL","USERNAME","NAME","SURNAME") OVERRIDING SYSTEM VALUE VALUES (1,'pippo@pippo.it','pippo','pippo','pluto');

@@ -22,7 +22,7 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 	@Autowired
 	private Environment env;
 	
-	private static final String headerAsset="relBean";
+	private static final String headerAsset="bean";
 	
 	@Override
 	public void configure() {
@@ -42,7 +42,6 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 			.process(new CompressorProcessor()).to("kafka:auctions");
 		
 		from("kafka:auctions")
-//		.bean(AuctionService.class)
 		.log("--------------PRE PROCESS--------------")
 		.process(new CheckRequestProcessor())
 		.log("--------------POST PROCESS-------------")
@@ -52,7 +51,7 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 		.doCatch(SagaException.class)
 			.transform()
 			.simple("${exception}")
-			.log("exception generate : ${body}")
+			.log("Exception generate : ${body}")
 		.endDoTry();
 		
 		from("direct:createAuction")
@@ -61,48 +60,45 @@ public class CamelRouteBuilderConfig extends RouteBuilder {
 			.log("--------------INIT SAGA-------------")
 			.timeout(5, TimeUnit.MINUTES) 
 			.propagation(SagaPropagation.REQUIRES_NEW)
-			.option(headerAsset, body())
-			.to("direct:setAuction")
-			.to("direct:setWallet")
-			.compensation("direct:cancelAuction")
-			.completion("direct:completeAuction")
-			.log("--------------END PROCESS-------------")
-			.end();
+			.compensation("direct:cancelFullAuction")
+			.completion("direct:completeFullAuction")
+				.to("direct:setAuction")
+				.to("direct:setWallet")
+				.log("--------------END PROCESS-------------")
+				.end();
 		
 		from("direct:setAuction")
-        .log("--------------setAuction-------------")
-		.saga()
-		.propagation(SagaPropagation.SUPPORTS)
-		.compensation("direct:cancelauction")
-		.bean(AuctionService.class, "setauction")
-		.option(headerAsset, body());
+	        .log("--------------setAuction-------------")
+			.saga()
+			.propagation(SagaPropagation.MANDATORY)
+				.bean(AuctionService.class, "setauction");
 
 		from("direct:setWallet")
-        .log("--------------setWallet-------------")
-		.saga()
-		.propagation(SagaPropagation.SUPPORTS)
-		.compensation("direct:cancelwalletupdate")
-		.bean(WalletService.class, "updatewallet")
-		.option(headerAsset, body());
-		
-		from("direct:completeAuction")
-		.transform(header(headerAsset))
-        .log("--------------completeAuction-------------")
-		.log("all done!");
+	        .log("--------------setWallet-------------")
+			.saga()
+			.propagation(SagaPropagation.MANDATORY)
+			.compensation("direct:cancelAuction")
+				.option(headerAsset, body())
+				.bean(WalletService.class, "updatewallet");
 		
 		from("direct:cancelAuction")
-		.transform(header(headerAsset))
-        .log("--------------cancelAuction-------------")
-		.bean(AuctionService.class, "rollback");
+			.transform(header(headerAsset))
+	        .log("--------------cancelAuction-------------")
+			.bean(AuctionService.class, "rollback");
 		
 		from("direct:cancelwalletupdate")
-		.transform(header(headerAsset))
-        .log("--------------cancelwalletupdate-------------")
-		.bean(WalletService.class, "rollback");
+	        .log("--------------cancelwalletupdate-------------")
+			.bean(WalletService.class, "rollback");
+		
+		from("direct:completeFullAuction")
+			.log("--------------completeAuction-------------")
+			.log("all done!")
+			.log("--------------Saga completed-------------");
 
-		from("direct:cancelauction")
-        .transform(header(headerAsset))
-        .log("--------------cancelauction-------------")
-        .log("exception generate : ${body}");
+		from("direct:cancelFullAuction")
+	        .log("--------------cancelauction-------------")
+	        .log("exception generate : ${body}")
+			.log("--------------Saga completed-------------");
+		
 	}
 }

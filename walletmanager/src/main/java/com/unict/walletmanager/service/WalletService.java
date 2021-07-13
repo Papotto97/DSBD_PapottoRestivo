@@ -25,6 +25,7 @@ public class WalletService {
 	
 	
 	public BaseModel<?> set(AuctionBean bean){
+
 		Optional<UserEntity> user = userRepository.findById(bean.getUserId());
 		if(user.isPresent()) {
 			WalletEntity en = user.get().getWallet();

@@ -20,5 +20,5 @@ CREATE TABLE "ITEM" (
 ALTER TABLE public."ITEM" ADD CONSTRAINT "ITEM_CURRENCY" FOREIGN KEY ("CURRENCY_ID") REFERENCES "CURRENCY"("ID");
 
 INSERT INTO "ITEM" ("ID","NAME","DESCRIPTION","STOCK_QTY","START_PRICE","CURRENCY_ID","AUCTION_HOUR") OVERRIDING SYSTEM VALUE VALUES
-	 (1,'sediapippo','la sedia più interessante del mondo',200,50.9,1,5),
-	 (2,'sediapippo','la sedia più interessante del mondo',200,50.9,1,5);
+	 (1,'Sedia','La sedia più interessante del mondo',200,50.9,1,5),
+	 (2,'Tavolo','Il tavolo più bello del mondo',200,50.9,1,5);

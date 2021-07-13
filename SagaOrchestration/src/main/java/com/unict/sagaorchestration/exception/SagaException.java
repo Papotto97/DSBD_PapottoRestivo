@@ -1,14 +1,11 @@
 package com.unict.sagaorchestration.exception;
 
-import java.math.BigInteger;
-
 public class SagaException extends Exception {
 
 	private static final long serialVersionUID = -4773159568328688297L;
 
 	private String errorDescription;
 	private String errorCode;
-	private BigInteger relationId;
 
 	public String getErrorDescription() {
 		return errorDescription;
@@ -24,14 +21,6 @@ public class SagaException extends Exception {
 
 	public void setErrorCode(String errorCode) {
 		this.errorCode = errorCode;
-	}
-
-	public BigInteger getRelationId() {
-		return relationId;
-	}
-
-	public void setRelationId(BigInteger relationId) {
-		this.relationId = relationId;
 	}
 
 }

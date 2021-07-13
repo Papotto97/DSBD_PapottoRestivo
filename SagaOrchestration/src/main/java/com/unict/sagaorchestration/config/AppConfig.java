@@ -6,6 +6,9 @@ package com.unict.sagaorchestration.config;
 import java.util.Arrays;
 import java.util.Collections;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.ConsumerTemplate;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -27,6 +30,8 @@ public class AppConfig {
 	
 	@Autowired
 	private Environment env;
+	@Autowired
+	private  CamelContext camelContext;
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Bean
@@ -48,5 +53,15 @@ public class AppConfig {
         restTemplate.setInterceptors(Collections.singletonList(new RestTemplateRequestInterceptor()));
         return restTemplate;
     }
+	
+	@Bean
+	ProducerTemplate producerTemplate() {
+		return camelContext.createProducerTemplate();
+	}
+	
+	@Bean
+	ConsumerTemplate consumerTemplate() {
+		return camelContext.createConsumerTemplate();
+	}
 	
 }

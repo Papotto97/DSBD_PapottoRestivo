@@ -1,6 +1,5 @@
 package com.unict.auctionmanager.service;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
@@ -113,6 +112,7 @@ public class AuctionService {
 						repositoryFactory.getAuctionRepository().save(auEntity);
 						repositoryFactory.getOfferHistoryRepository().save(ohEntity);
 
+						bean.setAuctionId(newUUID.toString());
 						return BaseModelBuilder.success(bean);
 
 					} else
@@ -147,7 +147,7 @@ public class AuctionService {
 						ohEntity = optOH.get();
 						
 						Optional<OfferHistoryEntity> optOld = repositoryFactory.getOfferHistoryRepository().findFirstByAuctionIdAndStakeLessThanAndOderderByTimestamp(uuid, bean.getStake());
-						if (!optOld.isPresent()) {
+						if (optOld.isPresent()) {
 							OfferHistoryEntity oldValue = optOld.get();
 							
 							auEntity.setUpdateTimestamp(oldValue.getTimestamp());
@@ -157,10 +157,12 @@ public class AuctionService {
 							repositoryFactory.getOfferHistoryRepository().delete(ohEntity);
 							repositoryFactory.getAuctionRepository().save(auEntity);
 
+						}
+						else {
+							repositoryFactory.getOfferHistoryRepository().delete(ohEntity);
+							repositoryFactory.getAuctionRepository().delete(auEntity);
+						}
 							return BaseModelBuilder.success(bean);
-							
-						} else
-							return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Old offer values not found", bean);
 						
 					} else
 						return BaseModelBuilder.error(HttpStatus.NOT_FOUND, "Old offer not found", bean);
