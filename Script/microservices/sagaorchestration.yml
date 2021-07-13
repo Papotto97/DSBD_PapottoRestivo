@@ -14,7 +14,7 @@ spec:
     spec: 
       containers: 
       - name: sagaorchestration
-        image: sagaorchestration:3.5
+        image: sagaorchestration:4.0
         ports: 
         - containerPort: 8081
 ---

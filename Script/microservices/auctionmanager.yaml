@@ -14,7 +14,7 @@ spec:
     spec: 
       containers: 
       - name: auctionmanager
-        image: auctionmanager:3.3
+        image: auctionmanager:4.0
         ports: 
         - containerPort: 8083
 ---

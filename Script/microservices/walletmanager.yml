@@ -14,7 +14,7 @@ spec:
     spec: 
       containers: 
       - name: walletmanager
-        image: walletmanager:3.3
+        image: walletmanager:4.0
         ports: 
         - containerPort: 8084
 ---
