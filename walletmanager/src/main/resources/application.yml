@@ -1,0 +1,77 @@
+logging:
+    level:
+        org:
+            springframework: INFO
+server:
+    port: 8084
+    
+spring:
+    application:
+        name: Wallet-Manager
+    profiles:      active: docker        
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        initialization-mode: always
+        platform: postgres
+        url: jdbc:postgresql://localhost:5432/AuctionManager
+        username: postgres
+        password: postgres
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        generate-ddl: false
+        hibernate:
+            ddl-auto: none
+            naming:
+                implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        properties:
+            hibernate:
+                globally_quoted_identifiers: true
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
+        show-sql: true
+    main:
+        banner-mode: 'off'
+
+---
+
+spring:
+  profiles: docker        
+  
+  datasource:
+      driver-class-name: org.postgresql.Driver
+      initialization-mode: always
+      platform: postgres
+      url: jdbc:postgresql://postgres:5432/DSDB
+      username: postgres
+      password: root
+            
+eureka:
+    client:
+        service-url:
+            defaultZone: http://discovery-service:8761/eureka
+    instance:
+        preferIpAddress: true
+
+---
+
+spring:
+  profiles: localhost        
+  
+  datasource:
+      driver-class-name: org.postgresql.Driver
+      initialization-mode: always
+      platform: postgres
+      url: jdbc:postgresql://localhost:5432/AuctionManager
+      username: postgres
+      password: postgres
+            
+eureka:
+    client:
+        service-url:
+            defaultZone: http://localhost:8761/eureka
+    instance:
+        preferIpAddress: true
+        
+            

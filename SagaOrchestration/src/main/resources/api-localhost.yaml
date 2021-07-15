@@ -1,0 +1,5 @@
+endpoint:
+   - microservice: Auction
+     url: http://localhost:8083
+   - microservice: Wallet
+     url: http://localhost:8084

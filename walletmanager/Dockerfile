@@ -1,7 +1,7 @@
 FROM maven:3-jdk-11 as builder
 WORKDIR /app
 COPY . .
-RUN mvn package -DskipTests
+RUN mvn package -DskipTests -Pdocker
 
 FROM openjdk:11-jdk
 COPY --from=builder /app/target/walletmanager-0.0.1-SNAPSHOT.jar ./walletmanager.jar

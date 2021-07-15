@@ -1,0 +1,48 @@
+camel:
+    component:
+        kafka:
+            brokers: localhost:9092
+            consumer:
+                properties:
+                    max:
+                        poll:
+                            interval:
+                                ms: 100000
+            enabled: true
+            max-request-size: 10485760
+    lra:
+        coordinatorUrl: http://localhost:8080
+        localParticipantUrl: http://localhost:8081
+    service:
+        lra:
+            enabled: false
+    servlet:
+        context-path: ''
+        
+eureka:
+    client:
+        service-url:
+            defaultZone: http://localhost:8761/eureka
+    instance:
+        preferIpAddress: true
+        
+logging:
+    level:
+        org:
+            apache:
+                camel: DEBUG
+                kafka:
+                    clients: INFO
+                    
+server:
+    port: 8081
+    tomcat:
+        max-http-form-post-size: 1MB
+        max-swallow-size: 1MB
+        
+spring:
+    application:
+        name: sagaorchestration
+    kafka:
+        consumer:
+            group-id: 1

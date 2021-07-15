@@ -1,4 +1,4 @@
-CREATE DATABASE "QUARTZ"
+CREATE DATABASE quartz
     WITH 
     OWNER = postgres
     ENCODING = 'UTF8'

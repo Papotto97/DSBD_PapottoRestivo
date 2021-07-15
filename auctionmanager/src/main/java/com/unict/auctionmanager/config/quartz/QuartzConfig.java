@@ -102,8 +102,8 @@ public class QuartzConfig
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        properties.setProperty("org.quartz.scheduler.instanceName", "SellCommodities");
-        properties.setProperty("org.quartz.scheduler.instanceId", "SellCommoditiesInstance");
+        properties.setProperty("org.quartz.scheduler.instanceName", "CheckCompletedAuction");
+        properties.setProperty("org.quartz.scheduler.instanceId", "CheckCompletedAuctionInstance");
 
         schedulerFactory.setOverwriteExistingJobs(true);
         schedulerFactory.setAutoStartup(true);

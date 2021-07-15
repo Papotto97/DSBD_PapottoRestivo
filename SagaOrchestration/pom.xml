@@ -15,6 +15,27 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>sagaorchestration</name>
 	<description>Big Data &amp; Distributed Systems project by Papotto - Restivo</description>
+	
+	<profiles>
+		<!-- DOCKER -->
+		<profile>
+			<id>docker</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<spring.profiles.active>docker</spring.profiles.active>
+			</properties>
+		</profile>
+		<!-- LOCALHOST -->
+		<profile>
+			<id>localhost</id>
+			<properties>
+				<spring.profiles.active>localhost</spring.profiles.active>
+			</properties>
+		</profile>
+	</profiles>
+	
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -139,7 +160,33 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<!-- display active profile in compile phase -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-help-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>show-profiles</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>active-profiles</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>log4j.properties</include>
+					<include>api-${spring.profiles.active}.yaml</include>
+					<include>application.properties</include>
+					<include>application-${spring.profiles.active}.properties</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 </project>

@@ -41,6 +41,7 @@ public class RestTemplateRequestInterceptor implements ClientHttpRequestIntercep
 		LOGGER.info("============================ Request =======================================");
 		LOGGER.info("Request Sent:");
 		LOGGER.info("----------------------------------------------------------------------------");
+		LOGGER.info("URI         : {}", request.getURI());
 		LOGGER.info("Headers     : {}", request.getHeaders());
 		LOGGER.info("----------------------------------------------------------------------------");
 		LOGGER.info("Body:");
