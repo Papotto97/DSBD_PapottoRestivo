@@ -119,8 +119,8 @@ services:
       - "8081:8081"
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
-      - eureka.client.service-url.defaultZone=http://discovery-service:8761/eureka
-      - camel_component_kafka_brokers=kafka1-service:9092
+      - "eureka.client.service-url.defaultZone=http://discovery-service:8761/eureka"
+      - "camel_component_kafka_brokers=kafka-service:9092"
     depends_on:
       - kafka-service
 
