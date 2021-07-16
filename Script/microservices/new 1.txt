@@ -1,8 +1,0 @@
-http://admin-kong-x2030-dev.westeurope.cloudapp.azure.com/
-
-http://proxy-kong-x2030-dev.westeurope.cloudapp.azure.com/
-
-http://manager-kong-x2030-dev.westeurope.cloudapp.azure.com/
-
-http://portal-kong-x2030-dev.westeurope.cloudapp.azure.com/
-

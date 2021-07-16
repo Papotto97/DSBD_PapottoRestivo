@@ -3,12 +3,12 @@ install minikube
 minikube start --cpus 4 --memory 4096
 minikube dashboard
 
-#inside Script\Production
+#inside Script\microservices
 kubectl apply -f postgres.yaml
 kubectl apply -f pgadmin.yaml
 
-minikube service pgadmin -> (username: lucarest94@gmail.com password: admin)
-CREATE SERVER -> host: postgres:5432 password: root
+minikube service pgadmin -> (username: lucarest94@gmail.com, password: admin)
+CREATE SERVER -> Name: postgresdb, host: postgres:5432, username: postgres password: root
 CREATE DATABASE DSBD
 CREATE TABLES
 INSERT INTO TABLES

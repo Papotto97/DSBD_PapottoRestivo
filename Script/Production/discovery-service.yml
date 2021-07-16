@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: discovery-service
+spec: 
+  selector: 
+    matchLabels: 
+      app: discovery-service
+  replicas: 1
+  template:
+    metadata: 
+        labels: 
+            app: discovery-service
+    spec: 
+      containers: 
+      - name: discovery-service
+        image: unict/discovery-service:1.0.0
+        ports: 
+        - containerPort: 8761
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: discovery-service
+spec:
+  type: ClusterIP
+  selector:
+    app: discovery-service
+  ports:
+    - protocol: TCP
+      port: 8761
+      targetPort: 8761
+---

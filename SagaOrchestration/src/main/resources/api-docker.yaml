@@ -1,5 +1,5 @@
 endpoint:
    - microservice: Auction
-     url: http://auctionmanager:8083
+     url: http://auctionmanager-service:8083
    - microservice: Wallet
-     url: http://walletmanager:8084
+     url: http://walletmanager-service:8084

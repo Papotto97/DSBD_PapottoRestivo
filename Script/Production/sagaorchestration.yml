@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: sagaorchestration
+spec: 
+  selector: 
+    matchLabels: 
+      app: sagaorchestration
+  replicas: 1
+  template:
+    metadata: 
+        labels: 
+            app: sagaorchestration
+    spec: 
+      containers: 
+      - name: sagaorchestration
+        image: unict/sagaorchestration:1.0.0
+        env: 
+         - name: SPRING_PROFILES_ACTIVE
+           value: "docker"
+         - name: camel_component_kafka_brokers
+           value: "kafka-service:9092"
+        ports: 
+        - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sagaorchestration-service
+spec:
+  type: ClusterIP
+  selector:
+    app: sagaorchestration
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081

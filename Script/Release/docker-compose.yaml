@@ -42,7 +42,7 @@ services:
       - ./zk-single-kafka-single/zoo1/data:/data
       - ./zk-single-kafka-single/zoo1/datalog:/datalog
       
-  kafka1:
+  kafka-service:
     image: wurstmeister/kafka
     restart: always
     hostname: kafka1
@@ -76,7 +76,7 @@ services:
     - "3030:3030"
     entrypoint: ./kowl --config.filepath=/etc/kowl/config.yaml
     depends_on:
-      - kafka1
+      - kafka-service
 
   discovery-service:
     image: unict/discovery-service:1.0.0
@@ -86,7 +86,7 @@ services:
     environment:
       - eureka_client_service-url_defaultZone=http://discovery-service:8761/eureka
     depends_on:
-      - kafka1
+      - kafka-service
 
   gateway-service:
     image: unict/gateway-service:1.0.0
@@ -96,9 +96,9 @@ services:
     environment:
       - eureka_client_service-url_defaultZone=http://discovery-service:8761/eureka
     depends_on:
-      - kafka1
+      - kafka-service
 
-  auctionmanager:
+  auctionmanager-service:
     image: unict/auctionmanager:1.0.0
     restart: always
     ports:
@@ -110,9 +110,9 @@ services:
       - spring_datasource_username=postgres
       - spring_datasource_password=root
     depends_on:
-      - kafka1
+      - kafka-service
 
-  sagaorchestration:
+  sagaorchestration-service:
     image: unict/sagaorchestration:1.0.0
     restart: always
     ports:
@@ -120,11 +120,11 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
       - eureka.client.service-url.defaultZone=http://discovery-service:8761/eureka
-      - camel_component_kafka_brokers=kafka1:9092
+      - camel_component_kafka_brokers=kafka1-service:9092
     depends_on:
-      - kafka1
+      - kafka-service
 
-  walletmanager:
+  walletmanager-service:
     image: unict/walletmanager:1.0.0
     restart: always
     ports:
@@ -136,7 +136,7 @@ services:
       - spring_datasource_username=postgres
       - spring_datasource_password=root
     depends_on:
-      - kafka1
+      - kafka-service
 
 volumes:
   db-data:
