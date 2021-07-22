@@ -156,6 +156,7 @@
 				<includes>
 					<include>application.properties</include>
 					<include>application-${spring.profiles.active}.properties</include>
+					<include>quartz.properties</include>
 				</includes>
 			</resource>
 		</resources>
